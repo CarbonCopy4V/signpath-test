@@ -15199,7 +15199,7 @@ async function run() {
         const downloadResponse = await artifactClient.downloadArtifact(artifact, path, options);
 
 
-        var file = fs.readFileSync(downloadedResponse.downloadPath + downloadedResponse.artifactName, (err, data) => {
+        var file = fs.readFileSync(downloadResponse.downloadPath + downloadResponse.artifactName, (err, data) => {
             if (err)
                 throw err;
 
