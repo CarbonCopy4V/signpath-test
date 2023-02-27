@@ -15189,24 +15189,15 @@ async function run() {
         const artifactConfigurationSlug = core.getInput('ArtifactConfigurationSlug');
         const artifact = core.getInput('Artifact');
         const artifactName = core.getInput('ArtifactName');
+        const organizationId = core.getInput('OrganizationId');
+
 
         core.info(`Custom SignPath Action ... `);
-
-        //core.info(`Waiting ${ms} milliseconds ...`);
-
-
-//        console.log(jarFile);
-
         const downloadResponse = await artifactClient.downloadArtifact(artifact, path, options);
-
-
         var file = fs.readFileSync(downloadResponse.downloadPath + "/" + artifactName, (err, data) => {
             if (err)
                 throw err;
-
         });
-
-
 
         var data = new FormData();
         data.append('Artifact', file, 'Artifact');
@@ -15215,21 +15206,19 @@ async function run() {
         data.append('ArtifactConfigurationSlug', artifactConfigurationSlug);
         data.append('Description', 'Description-TEST');
 
-        await fetch('https://app.signpath.io/API/v1/dc2fd7b3-5b0d-40a4-96a6-27ab31969ee9/SigningRequests', {
+        await fetch('https://app.signpath.io/API/v1/' + organizationId + '/SigningRequests', {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + ciUserToken,
             },
             body: data
         })
-                .then(response => response.json())
-                .then((data) => console.log(data));
+        .then(response => response.json())
+        .then((data) => console.log(data));
 
 
-        core.debug((new Date()).toTimeString()); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-        //await wait(parseInt(ms));
+        core.debug((new Date()).toTimeString());
         core.info((new Date()).toTimeString());
-
         core.debug("SignPath Test");
         core.setOutput('time', new Date().toTimeString());
     } catch (error) {
