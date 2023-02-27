@@ -15188,6 +15188,7 @@ async function run() {
         const signingPolicySlug = core.getInput('SigningPolicySlug');
         const artifactConfigurationSlug = core.getInput('ArtifactConfigurationSlug');
         const artifact = core.getInput('Artifact');
+        const artifactName = core.getInput('ArtifactName');
 
         core.info(`Custom SignPath Action ... `);
 
@@ -15199,7 +15200,7 @@ async function run() {
         const downloadResponse = await artifactClient.downloadArtifact(artifact, path, options);
 
 
-        var file = fs.readFileSync(downloadResponse.downloadPath + "/"+ downloadResponse.artifactName + ".jar", (err, data) => {
+        var file = fs.readFileSync(downloadResponse.downloadPath + "/" + artifactName, (err, data) => {
             if (err)
                 throw err;
 
